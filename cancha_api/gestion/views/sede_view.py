@@ -45,7 +45,6 @@ class SedeView(APIView):
         id_existe = Sede.objects.filter(id = id, eliminado = False).first()
 
         if id_existe:
-
             serializer = SedeSerializer(instance=id_existe, data=request.data)
 
             if serializer.is_valid():
@@ -62,9 +61,8 @@ class SedeView(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
             
         return Response(data={
-            "message": "Error al actualizar la sede",
-            "content": serializer.errors
-        }, status=status.HTTP_400_BAD_REQUEST)
+            "message": "No se encontró la sede"
+        }, status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request: Request, id):
 
