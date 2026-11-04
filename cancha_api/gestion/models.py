@@ -1,7 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from uuid import uuid4
-# Create your models here.
+from django.contrib.auth.models import UserManager
+
+class ManejadorUsuario(UserManager):
+
+    def create_superuser(self, username, email=None, password=None, **extra_fields):
+
+        extra_fields["rol"] = "ADMIN"
+
+        return super().create_superuser(username, email, password, **extra_fields)
+
 
 class User(AbstractUser):
     id = models.UUIDField(default=uuid4, primary_key=True)
@@ -25,6 +34,8 @@ class User(AbstractUser):
     habilitado = models.BooleanField(default=True)
 
     eliminado = models.BooleanField(default=False)
+
+    objects = ManejadorUsuario()
 
     class Meta:
         db_table = 'users'
