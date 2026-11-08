@@ -6,7 +6,6 @@ from rest_framework.request import Request
 from gestion.models import Sede
 from gestion.serializers import SedeSerializer
 
-
 class SedesView(APIView):
 
     def get(self, request: Request):
@@ -36,7 +35,6 @@ class SedesView(APIView):
             "message": "Error al crear la sede",
             "content": serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
-
 
 class SedeView(APIView):
 
@@ -77,9 +75,3 @@ class SedeView(APIView):
         return Response(data={
             "message": "No se encontró la sede"
         }, status=status.HTTP_404_NOT_FOUND)
-
-    
-
-
-
-

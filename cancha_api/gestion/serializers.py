@@ -1,22 +1,25 @@
 from rest_framework import serializers
-from .models import Sede, Cancha, Media
+from .models import Sede, Cancha, Media, Tarifa
 
+#Sede
 class SedeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sede
         fields = '__all__'
 
+#Cancha
 class CanchaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cancha
         fields = '__all__'
 
+#Media
 class MediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Media
         fields = '__all__'
 
-
+#Gerador URL para Media
 class GenerarUrlAWSSerializer(serializers.Serializer):
 
     extensionesValidas = ["png", "jpg", "jpeg", "pdf"]
@@ -50,3 +53,11 @@ class GenerarUrlAWSSerializer(serializers.Serializer):
     )
 
     folder = serializers.CharField(required=False)
+
+#Tarifa
+class TarifaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tarifa
+        fields = '__all__'
+
+
