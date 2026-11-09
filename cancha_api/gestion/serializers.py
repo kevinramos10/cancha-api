@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Sede, Cancha, Media, Tarifa
+from .models import Sede, Cancha, Media, Tarifa, User
 
 #Sede
 class SedeSerializer(serializers.ModelSerializer):
@@ -60,4 +60,23 @@ class TarifaSerializer(serializers.ModelSerializer):
         model = Tarifa
         fields = '__all__'
 
+#usuarios
+class UsuarioSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = User
+        exclude = [
+            'is_staff',
+            'is_superuser',
+            'is_active',
+            'user_permissions',
+            'last_login',
+            'groups',
+            'rol'
 
+        ]
+
+        extra_kwargs = {
+            'password': {
+                'write_only': True
+            }
+        }

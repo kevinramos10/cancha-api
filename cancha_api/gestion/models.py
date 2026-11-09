@@ -1,15 +1,31 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from uuid import uuid4
-from django.contrib.auth.models import UserManager
+from django.contrib.auth.base_user import BaseUserManager
 
-class ManejadorUsuario(UserManager):
+class ManejadorUsuario(BaseUserManager):
 
-    def create_superuser(self, username, email=None, password=None, **extra_fields):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError("El correo es obligatorio")
 
-        extra_fields["rol"] = "ADMIN"
+        email = self.normalize_email(email)
 
-        return super().create_superuser(username, email, password, **extra_fields)
+        usuario = self.model(email=email, **extra_fields)
+        usuario.set_password(password)
+        usuario.save(using=self._db)
+
+        return usuario
+
+
+    def create_superuser(self, email, password=None, **extra_fields):
+
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+        extra_fields['rol'] = 'ADMIN'
+
+        return self.create_user(email, password, **extra_fields)
 
 
 class User(AbstractUser):
@@ -36,6 +52,11 @@ class User(AbstractUser):
     eliminado = models.BooleanField(default=False)
 
     objects = ManejadorUsuario()
+
+    username = None
+    USERNAME_FIELD = 'email'
+
+    REQUIRED_FIELDS = ['nombre', 'telefono']
 
     class Meta:
         db_table = 'users'
