@@ -1,4 +1,4 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -8,6 +8,8 @@ from gestion.models import User
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from gestion.serializers import LoginSerializare
+
+from rest_framework.permissions import IsAuthenticated
 
 @api_view(['POST'])
 def registro_usuario(request):
@@ -84,3 +86,14 @@ def login_usuario(request):
             "message": "Error al iniciar sesion",
             "content": serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(http_method_names=['GET'])
+@permission_classes([IsAuthenticated])
+def perfilUsuario(request):
+
+    usuarioActual = request.user
+    serializador = UsuarioSerializer(instance = usuarioActual)
+    return Response(data={
+        "content": serializador.data
+    })

@@ -142,3 +142,9 @@ SIMPLE_JWT = {
     "SIGNING_KEY": getenv("JWT_SECRET")
 }
 
+#Para identificar a los usuarios por JWT
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
