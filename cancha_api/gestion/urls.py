@@ -3,12 +3,12 @@ from gestion.views.sede_view import SedeView, SedesView
 from gestion.views.cancha_view import CanchaView, CanchasView
 from gestion.views.media_view import GenerarUrlAWSView, CrearMediaView
 from gestion.views.tarifa_view import TarifasView, TarifaView
-from gestion.views.usuario_view import registro_usuario
+from gestion.views.usuario_view import registro_usuario, login_usuario, perfilUsuario
 
 urlpatterns = [
     path('sedes', SedesView.as_view()), path('sede/<uuid:id>', SedeView.as_view()),
     path('canchas', CanchasView.as_view()), path('cancha/<uuid:id>', CanchaView.as_view()),
     path('media/generar-url', GenerarUrlAWSView.as_view()), path('medias', CrearMediaView.as_view()), 
     path('tarifas', TarifasView.as_view()), path('tarifa/<uuid:id>', TarifaView.as_view()),
-    path('registro', registro_usuario),
+    path('registro', registro_usuario), path('login', login_usuario), path('perfil', perfilUsuario),
 ]
