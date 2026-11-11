@@ -5,6 +5,10 @@ from rest_framework import status
 from gestion.serializers import UsuarioSerializer
 from gestion.models import User
 
+from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
+from gestion.serializers import LoginSerializare
+
 @api_view(['POST'])
 def registro_usuario(request):
 
@@ -42,3 +46,41 @@ def registro_usuario(request):
         },
         status=status.HTTP_400_BAD_REQUEST
     )
+
+
+@api_view(['POST'])
+def login_usuario(request):
+
+    serializer = LoginSerializare(data = request.data)
+
+    if serializer.is_valid():
+        email = serializer.validated_data.get('email')
+        password = serializer.validated_data.get('password')
+
+        usuario = authenticate(
+            request,
+            email = email,
+            password = password
+        )
+
+        if usuario is not None:
+            refresh = RefreshToken.for_user(usuario)
+            access = refresh.access_token
+
+            return Response(data={
+                "message": "Inicio de session exitoso",
+                "content": {
+                    "refresh": str(refresh),
+                    "acces": str(access)
+                }
+            }, status=status.HTTP_200_OK)        
+        else:
+            return Response(data={
+                "message": "Correo o password incorrectos",                
+            }, status=status.HTTP_401_UNAUTHORIZED)
+
+    else:
+        return Response(data={
+            "message": "Error al iniciar sesion",
+            "content": serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)

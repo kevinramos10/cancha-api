@@ -80,3 +80,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
                 'write_only': True
             }
         }
+
+class LoginSerializare(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(required=True)
