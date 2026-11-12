@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Sede, Cancha, Media, Tarifa, User
+from .models import Sede, Cancha, Media, Tarifa, User, Cliente
 
 #Sede
 class SedeSerializer(serializers.ModelSerializer):
@@ -81,6 +81,18 @@ class UsuarioSerializer(serializers.ModelSerializer):
             }
         }
 
-class LoginSerializare(serializers.Serializer):
+class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
+
+class ClienteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cliente
+        fields = '__all__'
+        extra_kwargs = {
+            'user': {'read_only': True}
+        }
+
+
+
+
