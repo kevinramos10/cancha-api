@@ -7,7 +7,7 @@ from gestion.models import User
 
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
-from gestion.serializers import LoginSerializare
+from gestion.serializers import LoginSerializer
 
 from rest_framework.permissions import IsAuthenticated
 
@@ -53,7 +53,7 @@ def registro_usuario(request):
 @api_view(['POST'])
 def login_usuario(request):
 
-    serializer = LoginSerializare(data = request.data)
+    serializer = LoginSerializer(data = request.data)
 
     if serializer.is_valid():
         email = serializer.validated_data.get('email')
