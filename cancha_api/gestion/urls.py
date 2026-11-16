@@ -5,7 +5,7 @@ from gestion.views.media_view import GenerarUrlAWSView, CrearMediaView
 from gestion.views.tarifa_view import TarifasView, TarifaView
 from gestion.views.usuario_view import registro_usuario, login_usuario, perfilUsuario
 from gestion.views.cliente_view import ClienteView
-from gestion.views.reserva_view import ReservasView
+from gestion.views.reserva_view import ReservasView, ReservaView, HistorialReservaView
 
 urlpatterns = [
     path('sedes', SedesView.as_view()), path('sede/<uuid:id>', SedeView.as_view()),
@@ -14,5 +14,6 @@ urlpatterns = [
     path('tarifas', TarifasView.as_view()), path('tarifa/<uuid:id>', TarifaView.as_view()),
     path('registro', registro_usuario), path('login', login_usuario), path('perfil', perfilUsuario),
     path('clientes', ClienteView.as_view()), path('cliente/<uuid:id>', ClienteView.as_view()),
-    path('reservas', ReservasView.as_view()),
+    path('reservas', ReservasView.as_view()), path('reserva/<uuid:id>', ReservaView.as_view()),
+    path('reserva/<uuid:id>/historial', HistorialReservaView.as_view()),
 ]

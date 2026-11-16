@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Sede, Cancha, Media, Tarifa, User, Cliente, Reserva
+from .models import Sede, Cancha, Media, Tarifa, User, Cliente, Reserva, HistorialReserva
+from decimal import Decimal
 
 #Sede
 class SedeSerializer(serializers.ModelSerializer):
@@ -189,10 +190,48 @@ class ReservaSerializer(serializers.ModelSerializer):
                 "La cancha no tiene tarifas disponibles"
             )
 
+        tarifa = tarifas.filter(
+            hora_inicio__lte = fecha_inicio_lima.time(),
+            hora_fin__gte = fecha_fin_lima.time()
+        ).first()
+        if not tarifa:
+            raise serializers.ValidationError(
+                "No hay una tarifa que cubra el horario de la reserva"
+            )
+
+        horas = Decimal(duracion.total_seconds()) / Decimal(3600)
+
+        data['precio_total'] = tarifa.precio_hora * horas
+        data['estado'] = Estado.PENDIENTE
+
         return data
 
     class Meta:
         model = Reserva
+        fields = '__all__'
+        extra_kwargs = {
+            'estado': {'read_only': True},
+            'precio_total': {'read_only': True}
+        }
+
+#Cambiar estado de Reserva
+class CambiarEstadoReservaSerializer(serializers.Serializer):
+
+    estado = serializers.ChoiceField(
+        choices = Estado.choices,
+        required = True
+    )
+
+    motivo = serializers.CharField(
+        trim_whitespace=True,
+        max_length=50,
+        required=True
+    )
+
+#HistorialReserva
+class HistorialReservaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HistorialReserva
         fields = '__all__'
 
 
